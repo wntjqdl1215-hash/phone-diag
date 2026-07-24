@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>당신의 폰이 당신을 진단합니다 — 폰 중독 유형 테스트</title>
+<meta name="description" content="12개의 질문. 당신의 폰이 알고 있던 진실. 내 폰 중독 유형과 중독 지수를 확인해 보세요.">
+<meta property="og:title" content="당신의 폰이 당신을 진단합니다">
+<meta property="og:description" content="12개의 질문. 당신의 폰이 알고 있던 진실. 나의 폰 중독 유형은?">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://wntjqdl1215-hash.github.io/phone-diag/">
+<meta property="og:image" content="https://wntjqdl1215-hash.github.io/phone-diag/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+@font-face {
+  font-family: 'GmarketSans';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
+  font-weight: 700; font-display: swap;
+}
+:root {
+  --oled: #07080D;
+  --panel: #10121C;
+  --line: #1E2233;
+  --glow: #6D8DFF;
+  --badge: #FF4D5E;
+  --ok: #34D97B;
+  --ink: #F4F6FC;
+  --dim: #8A90A6;
+  --display: 'GmarketSans', 'Pretendard Variable', Pretendard, sans-serif;
+  --body: 'Pretendard Variable', Pretendard, -apple-system, 'Malgun Gothic', sans-serif;
+  --mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--body);
+  background: #020308;
+  color: var(--ink);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  line-height: 1.55;
+}
+.frame {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100dvh;
+  background: var(--oled);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+@media (min-width: 480px) {
+  body { align-items: flex-start; padding: 24px 0; }
+  .frame { min-height: calc(100dvh - 48px); border: 1px solid var(--line); border-radius: 28px; overflow: hidden; }
+}
+
+/* ── 상단 상태바 (시스템 스킨) ── */
+.statusbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 18px 10px;
+  font-family: var(--mono); font-size: 12px; color: var(--dim);
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.statusbar .batt { display: flex; align-items: center; gap: 6px; color: var(--badge); }
+.batt-icon { width: 22px; height: 11px; border: 1px solid var(--badge); border-radius: 3px; position: relative; }
+.batt-icon::before { content: ''; position: absolute; left: 1px; top: 1px; bottom: 1px; width: 12%; background: var(--badge); border-radius: 1px; }
+.batt-icon::after { content: ''; position: absolute; right: -3px; top: 3px; width: 2px; height: 5px; background: var(--badge); border-radius: 1px; }
+
+/* ── 진행 게이지 ── */
+.gauge-top { height: 3px; background: var(--line); flex-shrink: 0; }
+.gauge-top i { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, var(--glow), var(--badge)); transition: width .35s ease; }
+
+main { flex: 1; display: flex; flex-direction: column; padding: 0 22px; }
+section { display: flex; flex-direction: column; flex: 1; }
+[hidden] { display: none !important; }
+
+/* ── 인트로 ── */
+.intro { justify-content: center; gap: 26px; padding: 40px 0 60px; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; color: var(--glow); }
+h1 {
+  font-family: var(--display);
+  font-size: clamp(30px, 8.6vw, 38px);
+  line-height: 1.32;
+  font-weight: 700;
+}
+h1 em { font-style: normal; color: var(--glow); text-shadow: 0 0 24px rgba(109,141,255,.45); }
+.intro-sub { color: var(--dim); font-size: 15px; max-width: 30ch; }
+.alert-card {
+  background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--badge);
+  border-radius: 12px; padding: 14px 16px; font-size: 13.5px;
+}
+.alert-card b { color: var(--badge); font-weight: 600; display: block; margin-bottom: 4px; }
+.alert-card span { color: var(--dim); font-family: var(--mono); font-size: 12px; }
+.cta {
+  font-family: var(--display); font-size: 17px; color: var(--oled);
+  background: var(--ink); border: none; border-radius: 14px;
+  padding: 17px 20px; cursor: pointer; width: 100%;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.cta:active { transform: scale(.98); }
+.cta:focus-visible, .opt:focus-visible, .ghost:focus-visible { outline: 2px solid var(--glow); outline-offset: 3px; }
+.cta-meta { text-align: center; font-family: var(--mono); font-size: 11px; color: var(--dim); margin-top: -14px; }
+
+/* ── 질문 ── */
+.quiz { padding: 26px 0 40px; gap: 22px; }
+.q-meta { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11.5px; color: var(--dim); }
+.q-meta b { color: var(--badge); font-weight: 400; }
+.q-card { display: flex; flex-direction: column; gap: 8px; }
+.q-label { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--glow); }
+.q-label::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--glow); box-shadow: 0 0 10px var(--glow); }
+.q-text { font-family: var(--display); font-size: clamp(21px, 6vw, 25px); line-height: 1.42; min-height: 3.6em; }
+.opts { display: flex; flex-direction: column; gap: 11px; }
+.opt {
+  text-align: left; font-family: var(--body); font-size: 15.5px; color: var(--ink);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 13px;
+  padding: 15px 17px; cursor: pointer; line-height: 1.45;
+  transition: border-color .12s, background .12s, transform .1s;
+}
+.opt:active { transform: scale(.985); }
+.opt.picked { border-color: var(--glow); background: #161d33; }
+.ghost {
+  align-self: flex-start; background: none; border: none; color: var(--dim);
+  font-family: var(--mono); font-size: 12px; cursor: pointer; padding: 8px 0;
+}
+.ghost:hover { color: var(--ink); }
+
+/* ── 스캔 ── */
+.scan { justify-content: center; align-items: flex-start; gap: 14px; padding-bottom: 80px; }
+.scan-line { font-family: var(--mono); font-size: 13px; color: var(--dim); opacity: 0; animation: rise .4s ease forwards; }
+.scan-line.done::after { content: ' OK'; color: var(--ok); }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ── 결과 ── */
+.result { padding: 26px 0 48px; gap: 20px; }
+.r-head { display: flex; justify-content: space-between; align-items: baseline; }
+.r-head h2 { font-family: var(--display); font-size: 17px; font-weight: 700; }
+.r-head time { font-family: var(--mono); font-size: 11px; color: var(--dim); }
+.score-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px 20px 20px; }
+.score-label { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: .14em; }
+.score-num { font-family: var(--display); font-size: 64px; line-height: 1.15; }
+.score-num small { font-size: 30px; }
+.score-bar { height: 10px; background: var(--line); border-radius: 6px; overflow: hidden; margin: 10px 0 8px; }
+.score-bar i { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, var(--glow), var(--badge)); border-radius: 6px; transition: width 1.1s cubic-bezier(.2,.7,.2,1); }
+.score-zone { font-family: var(--mono); font-size: 12px; color: var(--dim); }
+.type-card { text-align: center; padding: 26px 18px 22px; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; }
+.type-emoji { font-size: 58px; line-height: 1; display: block; margin-bottom: 12px; }
+.type-name { font-family: var(--display); font-size: clamp(26px, 7.4vw, 32px); color: var(--glow); text-shadow: 0 0 26px rgba(109,141,255,.4); margin-bottom: 8px; }
+.type-line { color: var(--dim); font-size: 14.5px; max-width: 30ch; margin: 0 auto; }
+.sub-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 16px; }
+.sub-card h3 { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; color: var(--glow); margin-bottom: 12px; font-weight: 400; }
+.sym { list-style: none; display: flex; flex-direction: column; gap: 9px; font-size: 14.5px; }
+.sym li { padding-left: 20px; position: relative; }
+.sym li::before { content: '▸'; position: absolute; left: 2px; color: var(--badge); }
+.rx { font-size: 14.5px; line-height: 1.6; }
+.axes { display: flex; flex-direction: column; gap: 10px; }
+.axis { display: grid; grid-template-columns: 92px 1fr 38px; align-items: center; gap: 10px; font-size: 13px; }
+.axis .bar { height: 7px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.axis .bar i { display: block; height: 100%; width: 0%; background: var(--glow); border-radius: 4px; transition: width .9s ease .3s; }
+.axis .pct { font-family: var(--mono); font-size: 11px; color: var(--dim); text-align: right; }
+.share { display: flex; flex-direction: column; gap: 11px; margin-top: 4px; }
+.share-row { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+.btn2 {
+  font-family: var(--body); font-weight: 600; font-size: 14.5px; color: var(--ink);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 13px;
+  padding: 14px 10px; cursor: pointer; transition: border-color .12s;
+}
+.btn2:hover { border-color: var(--glow); }
+.disclaim { text-align: center; font-size: 11.5px; color: #565b6e; margin-top: 6px; }
+footer { text-align: center; font-family: var(--mono); font-size: 10.5px; color: #3a3f52; padding: 14px 0 22px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="statusbar">
+    <span id="clock">--:--</span>
+    <span>PHONE.DIAG</span>
+    <span class="batt">12% <i class="batt-icon"></i></span>
+  </div>
+  <div class="gauge-top"><i id="gaugeFill"></i></div>
+
+  <main>
+    <!-- 인트로 -->
+    <section class="intro" id="secIntro">
+      <span class="eyebrow">SYSTEM DIAGNOSTIC · KR</span>
+      <h1>당신의 폰이<br><em>당신을</em> 진단합니다</h1>
+      <p class="intro-sub">12개의 질문에 답하면, 당신의 폰이 조용히 기록해 온 진실을 알려드립니다.</p>
+      <div class="alert-card">
+        <b>⚠ 비정상적 사용 패턴 감지됨</b>
+        <span id="lastSeen">마지막 새벽 접속: 오늘 02:47</span>
+      </div>
+      <button class="cta" id="btnStart">진단 시작하기</button>
+      <p class="cta-meta">약 1분 소요 · 무료 · 결과 카드 저장 가능</p>
+    </section>
+
+    <!-- 질문 -->
+    <section class="quiz" id="secQuiz" hidden>
+      <div class="q-meta"><span id="qNum">Q 01 / 12</span><b>사용량 측정 중…</b></div>
+      <div class="q-card">
+        <span class="q-label">시스템 질의</span>
+        <p class="q-text" id="qText"></p>
+      </div>
+      <div class="opts" id="qOpts"></div>
+      <button class="ghost" id="btnBack" hidden>← 이전 질문</button>
+    </section>
+
+    <!-- 분석 -->
+    <section class="scan" id="secScan" hidden>
+      <span class="eyebrow">ANALYZING</span>
+      <div id="scanLines"></div>
+    </section>
+
+    <!-- 결과 -->
+    <section class="result" id="secResult" hidden>
+      <div class="r-head">
+        <h2>📱 사용자 진단 리포트</h2>
+        <time id="rDate"></time>
+      </div>
+
+      <div class="score-card">
+        <span class="score-label">중독 지수 ADDICTION INDEX</span>
+        <div class="score-num"><span id="rScore">0</span><small>%</small></div>
+        <div class="score-bar"><i id="rBar"></i></div>
+        <span class="score-zone" id="rZone"></span>
+      </div>
+
+      <div class="type-card">
+        <span class="type-emoji" id="rEmoji"></span>
+        <div class="type-name" id="rType"></div>
+        <p class="type-line" id="rLine"></p>
+      </div>
+
+      <div class="sub-card">
+        <h3>주요 증상 SYMPTOMS</h3>
+        <ul class="sym" id="rSym"></ul>
+      </div>
+
+      <div class="sub-card">
+        <h3>세부 수치 BREAKDOWN</h3>
+        <div class="axes" id="rAxes"></div>
+      </div>
+
+      <div class="sub-card">
+        <h3>처방 PRESCRIPTION</h3>
+        <p class="rx" id="rRx"></p>
+      </div>
+
+      <div class="share">
+        <button class="cta" id="btnSave">결과 카드 이미지 저장</button>
+        <div class="share-row">
+          <button class="btn2" id="btnShare">친구에게 공유</button>
+          <button class="btn2" id="btnRetry">다시 진단하기</button>
+        </div>
+      </div>
+      <p class="disclaim">본 테스트는 유머 콘텐츠이며 의학적 진단이 아닙니다.</p>
+    </section>
+  </main>
+
+  <footer>PHONE.DIAG v1.0 — 당신의 폰은 알고 있다</footer>
+</div>
+
+<canvas id="cardCanvas" width="1080" height="1350" style="display:none"></canvas>
+
+<script>
+'use strict';
+
+/* ───────── 데이터 ───────── */
+const QUESTIONS = [
+  { t: '아침에 눈 뜨자마자\n제일 먼저 하는 일은?', o: [
+    { s: '스트레칭하고 물 한 잔 마신다', p: 0 },
+    { s: '시간만 확인하고 일어난다', p: 1, a: 'noti' },
+    { s: '누운 채로 밤새 온 알림을 싹 확인한다', p: 2, a: 'noti' },
+    { s: '눈뜨자마자 쇼츠 보다가 지각 위기', p: 3, a: 'scroll' },
+  ]},
+  { t: '화장실에 폰을 두고 들어왔다.\n어떻게 하죠?', o: [
+    { s: '볼일만 보고 나온다', p: 0 },
+    { s: '좀 허전하지만 참을 만하다', p: 1, a: 'anx' },
+    { s: '샴푸 뒷면 성분표를 정독한다', p: 2, a: 'anx' },
+    { s: '다시 나가서 가져온다. 무조건.', p: 3, a: 'anx' },
+  ]},
+  { t: '"딱 5분만 보고 자야지"\n실제 결과는?', o: [
+    { s: '진짜 5분 보고 잔다', p: 0 },
+    { s: '30분 정도…?', p: 1, a: 'sleep' },
+    { s: '2시간. 어느새 새벽', p: 2, a: 'sleep' },
+    { s: '5분의 정의를 다시 쓰는 중 (해 뜰 때까지)', p: 3, a: 'sleep' },
+  ]},
+  { t: '엘리베이터 타는 10초 동안\n나는?', o: [
+    { s: '그냥 멍때린다', p: 0 },
+    { s: '습관적으로 화면을 켰다 끈다', p: 1, a: 'noti' },
+    { s: '그 새를 못 참고 인스타를 연다', p: 2, a: 'scroll' },
+    { s: '이미 타기 전부터 보고 있었다', p: 3, a: 'scroll' },
+  ]},
+  { t: '배터리 10% 알림이 떴다.\n지금 기분은?', o: [
+    { s: '별 생각 없다', p: 0 },
+    { s: '약간 신경 쓰인다', p: 1, a: 'anx' },
+    { s: '충전기 찾아 온 건물을 스캔한다', p: 2, a: 'anx' },
+    { s: '심장이 같이 방전되는 기분', p: 3, a: 'anx' },
+  ]},
+  { t: '밥 먹을 때\n폰의 위치는?', o: [
+    { s: '가방이나 주머니 속', p: 0 },
+    { s: '테이블 위, 화면 뒤집어서', p: 1, a: 'noti' },
+    { s: '테이블 위, 화면 보이게', p: 2, a: 'noti' },
+    { s: '한 손엔 숟가락, 한 손엔 폰. 영상 없인 밥이 안 넘어감', p: 3, a: 'scroll' },
+  ]},
+  { t: '알림이 안 울렸는데\n폰을 확인한 적 있나요?', o: [
+    { s: '거의 없다', p: 0 },
+    { s: '가끔 있다', p: 1, a: 'noti' },
+    { s: '방금도 했다', p: 2, a: 'noti' },
+    { s: '진동이 울린 것 같은 "환각"을 느낀 적 있다', p: 3, a: 'noti' },
+  ]},
+  { t: '쇼츠·릴스 보다가\n정신 차려보니?', o: [
+    { s: '쇼츠 잘 안 본다', p: 0 },
+    { s: '10분 정도 봤다', p: 1, a: 'scroll' },
+    { s: '1시간이 증발했다', p: 2, a: 'scroll' },
+    { s: '여기가 어디지… 알고리즘의 심해였다', p: 3, a: 'scroll' },
+  ]},
+  { t: '폰을 집에 두고 나온 걸\n지하철에서 깨달았다.', o: [
+    { s: '오히려 좋아. 디지털 디톡스', p: 0 },
+    { s: '하루 정도야 뭐', p: 1, a: 'anx' },
+    { s: '온종일 일이 손에 안 잡힌다', p: 2, a: 'anx' },
+    { s: '지각을 각오하고 집으로 돌아간다', p: 3, a: 'anx' },
+  ]},
+  { t: '친구랑 대화 중에\n알림이 울리면?', o: [
+    { s: '대화 끝나고 본다', p: 0 },
+    { s: '뭔지만 슬쩍 본다', p: 1, a: 'noti' },
+    { s: '"잠깐만" 하고 답장까지 한다', p: 2, a: 'noti' },
+    { s: '어느새 대화보다 폰에 집중하고 있다', p: 3, a: 'scroll' },
+  ]},
+  { t: '내 하루 스크린타임을\n확인해 보면?', o: [
+    { s: '2시간 이하', p: 0 },
+    { s: '3~4시간', p: 1, a: 'scroll' },
+    { s: '5~7시간', p: 2, a: 'scroll' },
+    { s: '확인하기 무서워서 안 본다', p: 3, a: 'anx' },
+  ]},
+  { t: '자기 직전,\n마지막으로 하는 일은?', o: [
+    { s: '책 읽거나 바로 잔다', p: 0 },
+    { s: '알람 맞추고 바로 눕는다', p: 1, a: 'sleep' },
+    { s: '침대에서 30분 폰 보다 잔다', p: 2, a: 'sleep' },
+    { s: '폰 든 채로 기절 (얼굴에 폰 떨어뜨려 봄)', p: 3, a: 'sleep' },
+  ]},
+];
+
+const AXES = {
+  sleep:  { name: '수면 침식',  icon: '🌙' },
+  scroll: { name: '무한 스크롤', icon: '🌀' },
+  anx:    { name: '분리 불안',  icon: '🚨' },
+  noti:   { name: '알림 강박',  icon: '🔔' },
+};
+
+const TYPES = {
+  sleep: { emoji: '🛏️', name: '침대 지박령형',
+    line: '침대와 폰이 물아일체. 당신의 밤은 알고리즘이 관리합니다.',
+    sym: ['"딱 5분만"의 5분은 사실 240분', '아침 알람 스누즈 연타 장인', '자다가 얼굴에 폰 떨어뜨려 본 경험 보유'],
+    rx: '취침 30분 전, 폰을 방 반대편에서 충전해 보세요. (네, 압니다. 안 하실 거라는 거.)' },
+  scroll: { emoji: '🧟', name: '무한 스크롤 좀비형',
+    line: '엄지는 오늘도 러닝머신. 알고리즘의 심해를 유영하는 중.',
+    sym: ['쇼츠 보다 1시간 증발이 일상', '"이것만 보고 끈다" 12회 연속 갱신', '밥 먹을 때 영상 필수 (반찬보다 중요)'],
+    rx: '앱 타이머 30분 설정. 그리고 "타이머 무시" 버튼과의 싸움에서 이겨 보세요.' },
+  anx: { emoji: '🚨', name: '폰 분리불안형',
+    line: '폰과 한 몸. 배터리 10%는 곧 나의 HP 10%.',
+    sym: ['화장실 재입장 경험 보유', '배터리 잔량 = 마음의 잔량', '폰 두고 온 날은 조퇴 각 재는 중'],
+    rx: '하루 10분 "폰 없이 산책"부터. 세상은 생각보다 안 무너집니다.' },
+  noti: { emoji: '🔔', name: '알림 반사신경형',
+    line: '울리지도 않은 폰을 확인하는 초능력자. 유령 진동까지 감지 완료.',
+    sym: ['무음인데 3분마다 화면 체크', '빨간 배지를 절대 못 견딤', '대화 중 "잠깐만" 전문가'],
+    rx: '안 중요한 앱 알림부터 꺼 보세요. 생각보다 아무 일도 일어나지 않습니다.' },
+  zen: { emoji: '🧘', name: '디지털 해탈형',
+    line: '상위 1% 자제력. 당신이야말로 폰의 주인입니다.',
+    sym: ['"딱 5분만"이 진짜 5분', '알림? 내일 몰아서 봄', '주변에서 연락 안 된다고 항의받는 편'],
+    rx: '처방이 없습니다. 오히려 저희가 한 수 배우고 싶습니다.' },
+};
+
+const ZONES = [
+  { min: 85, label: '폰과 물아일체 단계', color: '#FF4D5E' },
+  { min: 60, label: '중증 — 폰이 당신을 사용 중', color: '#FF4D5E' },
+  { min: 30, label: '위험 신호 — 경계선 진입', color: '#6D8DFF' },
+  { min: 0,  label: '청정 구역 — 통제권 보유', color: '#34D97B' },
+];
+
+/* ───────── 상태 ───────── */
+const $ = (id) => document.getElementById(id);
+let cur = 0;
+let answers = [];   // 선택한 옵션 인덱스
+let RESULT = null;  // { score, typeKey, axisPct }
+
+/* ───────── 상태바 시계 ───────── */
+function tick() {
+  const d = new Date();
+  $('clock').textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+}
+tick(); setInterval(tick, 30000);
+
+/* ───────── 화면 전환 ───────── */
+const SECS = ['secIntro', 'secQuiz', 'secScan', 'secResult'];
+function show(id) { SECS.forEach(s => $(s).hidden = (s !== id)); window.scrollTo(0, 0); }
+
+/* ───────── 질문 렌더 ───────── */
+function renderQ() {
+  const q = QUESTIONS[cur];
+  $('qNum').textContent = 'Q ' + String(cur + 1).padStart(2, '0') + ' / ' + QUESTIONS.length;
+  $('qText').textContent = '';
+  q.t.split('\n').forEach((line, i) => {
+    if (i > 0) $('qText').appendChild(document.createElement('br'));
+    $('qText').appendChild(document.createTextNode(line));
+  });
+  const box = $('qOpts');
+  box.innerHTML = '';
+  q.o.forEach((opt, i) => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.type = 'button';
+    b.textContent = opt.s;
+    b.addEventListener('click', () => pick(i, b));
+    box.appendChild(b);
+  });
+  $('btnBack').hidden = (cur === 0);
+  $('gaugeFill').style.width = (cur / QUESTIONS.length * 100) + '%';
+}
+
+let lock = false;
+function pick(i, btn) {
+  if (lock) return;
+  lock = true;
+  btn.classList.add('picked');
+  answers[cur] = i;
+  setTimeout(() => {
+    lock = false;
+    if (cur < QUESTIONS.length - 1) { cur++; renderQ(); }
+    else { $('gaugeFill').style.width = '100%'; startScan(); }
+  }, 180);
+}
+
+$('btnBack').addEventListener('click', () => { if (cur > 0) { cur--; renderQ(); } });
+
+/* ───────── 채점 ───────── */
+function grade() {
+  let total = 0;
+  const axisPts = { sleep: 0, scroll: 0, anx: 0, noti: 0 };
+  const axisMax = { sleep: 0, scroll: 0, anx: 0, noti: 0 };
+  QUESTIONS.forEach((q, qi) => {
+    // 축 최대치: 각 질문에서 그 축으로 얻을 수 있는 최고점을 합산
+    const best = {};
+    q.o.forEach(o => { if (o.a) best[o.a] = Math.max(best[o.a] || 0, o.p); });
+    Object.keys(best).forEach(a => axisMax[a] += best[a]);
+    const o = q.o[answers[qi]];
+    total += o.p;
+    if (o.a) axisPts[o.a] += o.p;
+  });
+  const score = Math.round(total / (QUESTIONS.length * 3) * 100);
+  const axisPct = {};
+  Object.keys(axisPts).forEach(a => axisPct[a] = axisMax[a] ? Math.round(axisPts[a] / axisMax[a] * 100) : 0);
+  let typeKey = 'zen';
+  if (score >= 30) {
+    typeKey = Object.keys(axisPts).reduce((m, a) => axisPts[a] > axisPts[m] ? a : m, 'sleep');
+  }
+  return { score, typeKey, axisPct };
+}
+
+/* ───────── 스캔 연출 ───────── */
+const SCAN_MSGS = [
+  '도파민 수용체 반응 분석 중…',
+  '엄지 근육 피로도 측정 중…',
+  '새벽 2시 접속 기록 대조 중…',
+  '"딱 5분만" 발언 이력 검색 중…',
+  '진단 리포트 생성 중…',
+];
+function startScan() {
+  show('secScan');
+  const box = $('scanLines');
+  box.innerHTML = '';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  SCAN_MSGS.forEach((m, i) => {
+    const el = document.createElement('div');
+    el.className = 'scan-line';
+    el.textContent = m;
+    el.style.animationDelay = reduced ? '0s' : (i * 0.38) + 's';
+    box.appendChild(el);
+    setTimeout(() => el.classList.add('done'), reduced ? 0 : i * 380 + 300);
+  });
+  setTimeout(showResult, reduced ? 100 : SCAN_MSGS.length * 380 + 500);
+}
+
+/* ───────── 결과 렌더 ───────── */
+function zoneOf(score) { return ZONES.find(z => score >= z.min); }
+
+function showResult() {
+  RESULT = grade();
+  const { score, typeKey, axisPct } = RESULT;
+  const T = TYPES[typeKey];
+  const Z = zoneOf(score);
+
+  show('secResult');
+  const d = new Date();
+  $('rDate').textContent = d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0');
+  $('rEmoji').textContent = T.emoji;
+  $('rType').textContent = T.name;
+  $('rLine').textContent = T.line;
+  $('rZone').textContent = Z.label;
+  $('rZone').style.color = Z.color;
+  $('rSym').innerHTML = '';
+  T.sym.forEach(s => { const li = document.createElement('li'); li.textContent = s; $('rSym').appendChild(li); });
+  $('rRx').textContent = T.rx;
+
+  const ax = $('rAxes');
+  ax.innerHTML = '';
+  Object.keys(AXES).forEach(a => {
+    const row = document.createElement('div');
+    row.className = 'axis';
+    row.innerHTML = '<span>' + AXES[a].icon + ' ' + AXES[a].name + '</span><div class="bar"><i></i></div><span class="pct">' + axisPct[a] + '%</span>';
+    ax.appendChild(row);
+    setTimeout(() => {
+      row.querySelector('.bar i').style.width = axisPct[a] + '%';
+      if (a === typeKey) row.querySelector('.bar i').style.background = 'linear-gradient(90deg,#6D8DFF,#FF4D5E)';
+    }, 60);
+  });
+
+  // 게이지 + 카운트업 (RAF가 안 도는 백그라운드 탭에서도 최종값은 보장)
+  setTimeout(() => { $('rBar').style.width = score + '%'; }, 60);
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) { $('rScore').textContent = score; }
+  else {
+    const t0 = performance.now();
+    (function step(now) {
+      const k = Math.min((now - t0) / 1000, 1);
+      $('rScore').textContent = Math.round(score * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(step);
+    })(t0);
+    setTimeout(() => { $('rScore').textContent = score; }, 1200);
+  }
+}
+
+/* ───────── 결과 카드 캔버스 (1080×1350, 인스타 4:5) ───────── */
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function wrapText(ctx, text, x, y, maxW, lh, align) {
+  const words = text.split(' ');
+  let line = '', lines = [];
+  words.forEach(w => {
+    const test = line ? line + ' ' + w : w;
+    if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = w; }
+    else line = test;
+  });
+  if (line) lines.push(line);
+  lines.forEach((l, i) => ctx.fillText(l, x, y + i * lh));
+  return y + lines.length * lh;
+}
+async function drawCard() {
+  const { score, typeKey, axisPct } = RESULT;
+  const T = TYPES[typeKey];
+  const Z = zoneOf(score);
+  try { await document.fonts.load('700 90px GmarketSans'); await document.fonts.load('600 40px "Pretendard Variable"'); } catch (e) {}
+
+  const cv = $('cardCanvas');
+  const ctx = cv.getContext('2d');
+  const W = 1080, H = 1350;
+
+  ctx.fillStyle = '#07080D';
+  ctx.fillRect(0, 0, W, H);
+  // 상단 글로우
+  const g = ctx.createRadialGradient(W / 2, -80, 50, W / 2, -80, 700);
+  g.addColorStop(0, 'rgba(109,141,255,.22)');
+  g.addColorStop(1, 'rgba(109,141,255,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, 700);
+  // 테두리
+  ctx.strokeStyle = '#1E2233';
+  ctx.lineWidth = 2;
+  roundRect(ctx, 24, 24, W - 48, H - 48, 36); ctx.stroke();
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#8A90A6';
+  ctx.font = '26px ui-monospace, Consolas, monospace';
+  ctx.fillText('PHONE.DIAG — 사용자 진단 리포트', W / 2, 110);
+  const d = new Date();
+  ctx.fillText(d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0'), W / 2, 152);
+
+  ctx.fillStyle = '#8A90A6';
+  ctx.font = '28px ui-monospace, Consolas, monospace';
+  ctx.fillText('중 독 지 수', W / 2, 250);
+  ctx.fillStyle = Z.color;
+  ctx.font = '700 170px GmarketSans, sans-serif';
+  ctx.fillText(score + '%', W / 2, 420);
+
+  // 게이지
+  const bx = 140, bw = W - 280, by = 470, bh = 26;
+  ctx.fillStyle = '#1E2233';
+  roundRect(ctx, bx, by, bw, bh, 13); ctx.fill();
+  const lg = ctx.createLinearGradient(bx, 0, bx + bw, 0);
+  lg.addColorStop(0, '#6D8DFF'); lg.addColorStop(1, '#FF4D5E');
+  ctx.fillStyle = lg;
+  roundRect(ctx, bx, by, Math.max(bw * score / 100, 26), bh, 13); ctx.fill();
+  ctx.fillStyle = '#8A90A6';
+  ctx.font = '26px ui-monospace, Consolas, monospace';
+  ctx.fillText(Z.label, W / 2, 545);
+
+  // 유형
+  ctx.font = '120px "Segoe UI Emoji", "Apple Color Emoji", sans-serif';
+  ctx.fillText(T.emoji, W / 2, 720);
+  ctx.fillStyle = '#6D8DFF';
+  ctx.shadowColor = 'rgba(109,141,255,.55)'; ctx.shadowBlur = 40;
+  ctx.font = '700 88px GmarketSans, sans-serif';
+  ctx.fillText(T.name, W / 2, 830);
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = '#C9CEDC';
+  ctx.font = '34px "Pretendard Variable", Pretendard, sans-serif';
+  wrapText(ctx, T.line, W / 2, 890, 820, 48, 'center');
+
+  // 증상 박스
+  ctx.fillStyle = '#10121C';
+  roundRect(ctx, 90, 950, W - 180, 240, 24); ctx.fill();
+  ctx.strokeStyle = '#1E2233'; roundRect(ctx, 90, 950, W - 180, 240, 24); ctx.stroke();
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#6D8DFF';
+  ctx.font = '24px ui-monospace, Consolas, monospace';
+  ctx.fillText('주요 증상', 130, 1002);
+  ctx.fillStyle = '#E7EAF3';
+  ctx.font = '30px "Pretendard Variable", Pretendard, sans-serif';
+  T.sym.forEach((s, i) => {
+    ctx.fillStyle = '#FF4D5E'; ctx.fillText('▸', 130, 1050 + i * 48);
+    ctx.fillStyle = '#E7EAF3'; ctx.fillText(s, 165, 1050 + i * 48);
+  });
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#565b6e';
+  ctx.font = '26px "Pretendard Variable", Pretendard, sans-serif';
+  ctx.fillText('너는 어떤 유형? — 폰 중독 유형 테스트', W / 2, 1268);
+
+  return cv.toDataURL('image/png');
+}
+
+/* ───────── 버튼 ───────── */
+$('btnStart').addEventListener('click', () => { cur = 0; answers = []; renderQ(); show('secQuiz'); });
+$('btnRetry').addEventListener('click', () => { cur = 0; answers = []; $('gaugeFill').style.width = '0%'; show('secIntro'); });
+
+$('btnSave').addEventListener('click', async () => {
+  const btn = $('btnSave');
+  const orig = btn.textContent;
+  btn.textContent = '카드 생성 중…';
+  try {
+    const url = await drawCard();
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '폰중독테스트_결과.png';
+    a.click();
+    btn.textContent = '저장 완료!';
+  } catch (e) {
+    btn.textContent = '저장 실패 — 캡처로 저장해 주세요';
+  }
+  setTimeout(() => { btn.textContent = orig; }, 1800);
+});
+
+$('btnShare').addEventListener('click', async () => {
+  const T = TYPES[RESULT.typeKey];
+  const text = '내 폰 중독 유형: ' + T.name + ' ' + T.emoji + ' (중독 지수 ' + RESULT.score + '%)\n너도 진단받아 봐 👇';
+  const url = location.href;
+  const btn = $('btnShare');
+  if (navigator.share) {
+    try { await navigator.share({ title: '폰 중독 유형 테스트', text, url }); } catch (e) {}
+  } else {
+    try {
+      await navigator.clipboard.writeText(text + '\n' + url);
+      btn.textContent = '링크 복사 완료!';
+    } catch (e) { btn.textContent = '주소창 링크를 복사해 주세요'; }
+    setTimeout(() => { btn.textContent = '친구에게 공유'; }, 1800);
+  }
+});
+</script>
+</body>
+</html>
