@@ -169,6 +169,20 @@ h1 em { font-style: normal; color: var(--glow); text-shadow: 0 0 24px rgba(109,1
 .shop .s-tag { color: var(--dim); font-size: 12.5px; display: block; margin-top: 2px; }
 .shop .s-go { margin-left: auto; color: var(--glow); font-size: 18px; flex-shrink: 0; }
 .shop-law { font-size: 11px; color: #565b6e; margin-top: 10px; line-height: 1.5; }
+.follow {
+  display: flex; align-items: center; gap: 12px; text-decoration: none;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 13px;
+  padding: 14px 16px; transition: border-color .12s;
+}
+.follow:hover { border-color: var(--glow); }
+.f-ic {
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+  background: #1c2136; color: var(--glow); font-weight: 700; font-size: 17px;
+  display: flex; align-items: center; justify-content: center;
+}
+.f-txt b { display: block; color: var(--ink); font-size: 14.5px; }
+.f-txt em { font-style: normal; color: var(--dim); font-size: 12.5px; }
+.f-go { margin-left: auto; color: var(--glow); font-size: 18px; }
 .axes { display: flex; flex-direction: column; gap: 10px; }
 .axis { display: grid; grid-template-columns: 92px 1fr 38px; align-items: center; gap: 10px; font-size: 13px; }
 .axis .bar { height: 7px; background: var(--line); border-radius: 4px; overflow: hidden; }
@@ -277,6 +291,11 @@ footer { text-align: center; font-family: var(--mono); font-size: 10.5px; color:
           <button class="btn2" id="btnShare">친구에게 공유</button>
           <button class="btn2" id="btnRetry">다시 진단하기</button>
         </div>
+        <a class="follow" href="https://www.threads.com/@uzouzo_k" target="_blank" rel="noopener">
+          <span class="f-ic">@</span>
+          <span class="f-txt"><b>만든 사람 쓰레드 팔로우</b><em>@uzouzo_k — 다음 테스트 예고는 여기서</em></span>
+          <span class="f-go">→</span>
+        </a>
       </div>
       <p class="disclaim">본 테스트는 유머 콘텐츠이며 의학적 진단이 아닙니다.</p>
     </section>
