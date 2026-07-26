@@ -585,6 +585,7 @@ function showResult() {
 
   show('secResult');
   track('test_complete', { type_key: typeKey, type_name: T.name, score: score });
+  track('result_' + typeKey); // 유형 분포 집계용 — 이벤트 이름만으로 조회 가능(맞춤 측정기준 불필요)
   const d = new Date();
   $('rDate').textContent = d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0');
   $('rEmoji').textContent = T.emoji;
@@ -647,7 +648,7 @@ function renderShop(typeKey) {
     const a = document.createElement('a');
     a.className = 'rx-card' + (i === 0 ? ' rx-first' : '');
     a.href = p.url; a.target = '_blank'; a.rel = 'sponsored noopener';
-    a.addEventListener('click', () => track('shop_click', { item_id: p.id, item_name: p.name, type_key: typeKey }));
+    a.addEventListener('click', () => { track('shop_click', { item_id: p.id, item_name: p.name, type_key: typeKey }); track('shopclick_' + p.id); });
     if (!reduced) a.style.animationDelay = (0.15 + i * 0.18) + 's';
 
     const head = document.createElement('div'); head.className = 'rx-head';
