@@ -158,16 +158,27 @@ h1 em { font-style: normal; color: var(--glow); text-shadow: 0 0 24px rgba(109,1
 .sym li { padding-left: 20px; position: relative; }
 .sym li::before { content: '▸'; position: absolute; left: 2px; color: var(--badge); }
 .rx { font-size: 14.5px; line-height: 1.6; }
-.shop { display: flex; flex-direction: column; gap: 10px; }
-.shop a {
-  display: flex; align-items: center; gap: 12px; text-decoration: none;
-  background: #161a28; border: 1px solid #262c40; border-radius: 12px;
-  padding: 13px 15px; transition: border-color .12s;
+.shop { display: flex; flex-direction: column; gap: 11px; }
+.rx-card {
+  display: block; text-decoration: none;
+  background: #161a28; border: 1px solid #262c40; border-radius: 14px;
+  padding: 12px 14px 13px;
+  animation: rise .4s ease both;
+  transition: border-color .12s, transform .12s;
 }
-.shop a:hover { border-color: var(--glow); }
-.shop .s-name { color: var(--ink); font-size: 14.5px; font-weight: 600; display: block; }
-.shop .s-tag { color: var(--dim); font-size: 12.5px; display: block; margin-top: 2px; }
-.shop .s-go { margin-left: auto; color: var(--glow); font-size: 18px; flex-shrink: 0; }
+.rx-card:hover { border-color: var(--glow); transform: translateY(-1px); }
+.rx-card:active { transform: scale(.985); }
+.rx-first { border-color: #3a4a7a; background: linear-gradient(180deg, #1a2036, #161a28); }
+.rx-head { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.rx-no { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; color: var(--dim); }
+.rx-badge { font-size: 10.5px; font-weight: 700; color: #ffb4bc; background: #3d1a20; border: 1px solid #5f2a34; border-radius: 20px; padding: 2px 9px; }
+.rx-cta { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--oled); background: var(--ink); border-radius: 16px; padding: 5px 11px; white-space: nowrap; }
+.rx-body { display: flex; gap: 12px; align-items: flex-start; }
+.rx-ic { width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; background: #10131e; border: 1px solid #262c40; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.rx-txt { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.rx-txt b { color: var(--ink); font-size: 15px; }
+.rx-tag { color: var(--dim); font-size: 12.5px; line-height: 1.45; }
+.rx-dose { margin-top: 3px; font-size: 11.5px; color: #8fb4ff; background: #141a2e; border-left: 2px solid #3a4a7a; padding: 4px 8px; border-radius: 0 8px 8px 0; }
 .shop-law { font-size: 11px; color: #565b6e; margin-top: 10px; line-height: 1.5; }
 .axes { display: flex; flex-direction: column; gap: 10px; }
 .axis { display: grid; grid-template-columns: 92px 1fr 38px; align-items: center; gap: 10px; font-size: 13px; }
@@ -402,43 +413,43 @@ const TYPES = {
    유형 풀에서 랜덤 2개 + 공통 풀에서 랜덤 1개 = 최대 3개. 전부 비어 있으면 처방템 칸 자체가 안 보임. */
 const PRODUCTS = {
   sleep: [
-    { id: 'S1',  name: '타이머 잠금함(폰 감옥)', tag: '"딱 5분만"이 안 되면 물리적으로 가둡니다', url: 'https://link.coupang.com/a/fGq8moeLYq' },
-    { id: 'S2',  name: '무소음 아날로그 자명종', tag: '폰 알람 끊기 — 눈뜨자마자 알림 지옥 차단의 시작', url: 'https://link.coupang.com/a/fGq9j99hym' },
-    { id: 'S3',  name: '백색소음기', tag: '쇼츠 소리 대신 빗소리로 잠들기', url: 'https://link.coupang.com/a/fGracSBf0S' },
-    { id: 'S6',  name: '수면 무드등', tag: '블루라이트 대신 주황빛', url: 'https://link.coupang.com/a/fGrblHNOeW' },
-    { id: 'S13', name: '침대 독서등', tag: '자기 전 10분, 화면 말고 종이', url: 'https://link.coupang.com/a/fGrc4uQc1Y' },
+    { id: 'S1',  em: '🔒', name: '타이머 잠금함(폰 감옥)', tag: '"딱 5분만"이 안 되면 물리적으로 가둡니다', dose: '취침 1시간 전, 폰을 투옥하고 잠글 것', url: 'https://link.coupang.com/a/fGq8moeLYq' },
+    { id: 'S2',  em: '⏰', name: '무소음 아날로그 자명종', tag: '폰 알람 끊기 — 눈뜨자마자 알림 지옥 차단의 시작', dose: '알람을 이관하고 폰은 거실에서 재울 것', url: 'https://link.coupang.com/a/fGq9j99hym' },
+    { id: 'S3',  em: '🌧️', name: '백색소음기', tag: '쇼츠 소리 대신 빗소리로 잠들기', dose: '소등 후 빗소리 30분, 화면 금지', url: 'https://link.coupang.com/a/fGracSBf0S' },
+    { id: 'S6',  em: '🌙', name: '수면 무드등', tag: '블루라이트 대신 주황빛', dose: '취침 30분 전 조명 전환', url: 'https://link.coupang.com/a/fGrblHNOeW' },
+    { id: 'S13', em: '📖', name: '침대 독서등', tag: '자기 전 10분, 화면 말고 종이', dose: '1일 1회, 종이책 10분과 병용', url: 'https://link.coupang.com/a/fGrc4uQc1Y' },
   ],
   scroll: [
-    { id: 'S1',  name: '타이머 잠금함(폰 감옥)', tag: '엄지 러닝머신 강제 종료 버튼', url: 'https://link.coupang.com/a/fGq8moeLYq' },
-    { id: 'Z2',  name: '1000피스 직소퍼즐', tag: '알고리즘 피드 대신 그림 한 장 완성', url: 'https://link.coupang.com/a/fGred1bM1Q' },
-    { id: 'Z3',  name: '독서대', tag: '폰 거치대 말고 책 거치대', url: 'https://link.coupang.com/a/fGrfcYpaOO' },
-    { id: 'Z9',  name: '스피드큐브', tag: '새로고침 대신 큐브 돌리기', url: 'https://link.coupang.com/a/fGrf0DbqSq' },
-    { id: 'Z13', name: '요가매트', tag: '스크롤 30분 = 스트레칭 30분으로 환전', url: 'https://link.coupang.com/a/fGrgGdh8mW' },
-    { id: 'Z17', name: '새싹 재배 키트', tag: '진짜 피드(feed)는 새싹 주는 것', url: 'https://link.coupang.com/a/fGrhsGrorY' },
+    { id: 'S1',  em: '🔒', name: '타이머 잠금함(폰 감옥)', tag: '엄지 러닝머신 강제 종료 버튼', dose: '엄지가 근질거리면 즉시 투옥', url: 'https://link.coupang.com/a/fGq8moeLYq' },
+    { id: 'Z2',  em: '🧩', name: '1000피스 직소퍼즐', tag: '알고리즘 피드 대신 그림 한 장 완성', dose: '스크롤 충동 시 50피스씩', url: 'https://link.coupang.com/a/fGred1bM1Q' },
+    { id: 'Z3',  em: '📚', name: '독서대', tag: '폰 거치대 말고 책 거치대', dose: '폰 자리에 책을 거치할 것', url: 'https://link.coupang.com/a/fGrfcYpaOO' },
+    { id: 'Z9',  em: '🎲', name: '스피드큐브', tag: '새로고침 대신 큐브 돌리기', dose: '새로고침 1회 = 한 면 맞추기', url: 'https://link.coupang.com/a/fGrf0DbqSq' },
+    { id: 'Z13', em: '🧘', name: '요가매트', tag: '스크롤 30분 = 스트레칭 30분으로 환전', dose: '릴스 10개 참을 때마다 1세트', url: 'https://link.coupang.com/a/fGrgGdh8mW' },
+    { id: 'Z17', em: '🌱', name: '새싹 재배 키트', tag: '진짜 피드(feed)는 새싹 주는 것', dose: '아침마다 물 주기 — 진짜 피드 갱신', url: 'https://link.coupang.com/a/fGrhsGrorY' },
   ],
   anx: [
-    { id: 'A1',  name: '손목시계', tag: '시간 보려고 폰 열었다 30분 증발 — 이걸로 차단', url: 'https://link.coupang.com/a/fGri8Nyi6K' },
-    { id: 'A2',  name: '다이어리 플래너', tag: '일정을 폰 밖으로 대피', url: 'https://link.coupang.com/a/fGrkcEL5cO' },
-    { id: 'A3',  name: '대용량 보조배터리', tag: '배터리 10% 공포엔 현실적 처방 (인정합니다)', url: 'https://link.coupang.com/a/fGrtd2K4TA' },
-    { id: 'A7',  name: 'MP3 플레이어', tag: '음악"만" 되는 기계 — 알림이 없는 평화', url: 'https://link.coupang.com/a/fGrtQYbz3Y' },
-    { id: 'A13', name: '스마트태그', tag: '불안의 원인을 기술로 제거', url: 'https://link.coupang.com/a/fGrwdFGeZg' },
+    { id: 'A1',  em: '⌚', name: '손목시계', tag: '시간 보려고 폰 열었다 30분 증발 — 이걸로 차단', dose: '시간 확인은 손목으로, 폰은 주머니', url: 'https://link.coupang.com/a/fGri8Nyi6K' },
+    { id: 'A2',  em: '📔', name: '다이어리 플래너', tag: '일정을 폰 밖으로 대피', dose: '일정을 종이로 이관, 1일 2회 열람', url: 'https://link.coupang.com/a/fGrkcEL5cO' },
+    { id: 'A3',  em: '🔋', name: '대용량 보조배터리', tag: '배터리 10% 공포엔 현실적 처방 (인정합니다)', dose: '외출 시 휴대 — HP 불안 즉시 완화', url: 'https://link.coupang.com/a/fGrtd2K4TA' },
+    { id: 'A7',  em: '🎧', name: 'MP3 플레이어', tag: '음악"만" 되는 기계 — 알림이 없는 평화', dose: '산책 시 폰 대신 지참', url: 'https://link.coupang.com/a/fGrtQYbz3Y' },
+    { id: 'A13', em: '📍', name: '스마트태그', tag: '불안의 원인을 기술로 제거', dose: '폰에 부착 — 분실 걱정 원천 차단', url: 'https://link.coupang.com/a/fGrwdFGeZg' },
   ],
   noti: [
-    { id: 'N1', name: '타임타이머 큐브', tag: '확인 욕구를 25분 단위로 가두기', url: 'https://link.coupang.com/a/fGrwPTaJxY' },
-    { id: 'N2', name: '노이즈캔슬링 이어폰', tag: '세상 알림 전체 음소거 버튼', url: 'https://link.coupang.com/a/fGrxLcgHXo' },
-    { id: 'N3', name: '모래시계(30분)', tag: '모래 떨어지는 동안은 폰 금지 — 아날로그의 위엄', url: 'https://link.coupang.com/a/fGryLxFfZ6' },
-    { id: 'N4', name: '소음차단 귀마개', tag: '진동 환청까지 차단', url: 'https://link.coupang.com/a/fGrAc0f6UC' },
+    { id: 'N1', em: '⏲️', name: '타임타이머 큐브', tag: '확인 욕구를 25분 단위로 가두기', dose: '집중 25분마다 1회전', url: 'https://link.coupang.com/a/fGrwPTaJxY' },
+    { id: 'N2', em: '🎧', name: '노이즈캔슬링 이어폰', tag: '세상 알림 전체 음소거 버튼', dose: '집중 시간에 착용, 세상 음소거', url: 'https://link.coupang.com/a/fGrxLcgHXo' },
+    { id: 'N3', em: '⌛', name: '모래시계(30분)', tag: '모래 떨어지는 동안은 폰 금지 — 아날로그의 위엄', dose: '모래가 다 떨어질 때까지 폰 금지', url: 'https://link.coupang.com/a/fGryLxFfZ6' },
+    { id: 'N4', em: '🤫', name: '소음차단 귀마개', tag: '진동 환청까지 차단', dose: '유령 진동 감지 시 착용', url: 'https://link.coupang.com/a/fGrAc0f6UC' },
   ],
   zen: [
-    { id: 'D1', name: '폴라로이드 카메라', tag: '아날로그 장인 인정템', url: 'https://link.coupang.com/a/fGrCUQaUqi' },
-    { id: 'D5', name: '보온 텀블러', tag: '산책 동반자', url: 'https://link.coupang.com/a/fGrDyIx21Q' },
+    { id: 'D1', em: '📸', name: '폴라로이드 카메라', tag: '아날로그 장인 인정템', dose: '주말 1롤 — 보정 불가, 그게 맛', url: 'https://link.coupang.com/a/fGrCUQaUqi' },
+    { id: 'D5', em: '☕', name: '보온 텀블러', tag: '산책 동반자', dose: '폰 없는 산책에 동행시킬 것', url: 'https://link.coupang.com/a/fGrDyIx21Q' },
   ],
   common: [
-    { id: 'C1',  name: '도서 「도파민네이션」', tag: '이 테스트의 교과서', url: 'https://link.coupang.com/a/fGrEreMjdY' },
-    { id: 'C2',  name: '도서 「도둑맞은 집중력」', tag: '내 집중력 어디 갔나 — 범인이 여기 있습니다', url: 'https://link.coupang.com/a/fGrFbaCiWa' },
-    { id: 'S1',  name: '타이머 잠금함(폰 감옥)', tag: '전 유형 공통 최후의 수단', url: 'https://link.coupang.com/a/fGq8moeLYq' },
-    { id: 'C7',  name: '캐모마일 티', tag: '폰 대신 차 한 잔', url: 'https://link.coupang.com/a/fGrFSmO9tY' },
-    { id: 'C12', name: '습관 트래커 캘린더', tag: '폰 안 본 날 도장 찍기', url: 'https://link.coupang.com/a/fGrGLP8PCe' },
+    { id: 'C1',  em: '📕', name: '도서 「도파민네이션」', tag: '이 테스트의 교과서', dose: '자기 전 10쪽, 스크롤 대체용', url: 'https://link.coupang.com/a/fGrEreMjdY' },
+    { id: 'C2',  em: '📗', name: '도서 「도둑맞은 집중력」', tag: '내 집중력 어디 갔나 — 범인이 여기 있습니다', dose: '출퇴근길 1챕터', url: 'https://link.coupang.com/a/fGrFbaCiWa' },
+    { id: 'S1',  em: '🔒', name: '타이머 잠금함(폰 감옥)', tag: '전 유형 공통 최후의 수단', dose: '재발 시 즉시 물리 차단', url: 'https://link.coupang.com/a/fGq8moeLYq' },
+    { id: 'C7',  em: '🍵', name: '캐모마일 티', tag: '폰 대신 차 한 잔', dose: '밤 스크롤 충동 시 1잔', url: 'https://link.coupang.com/a/fGrFSmO9tY' },
+    { id: 'C12', em: '📅', name: '습관 트래커 캘린더', tag: '폰 안 본 날 도장 찍기', dose: '1일 1도장, 7일 연속 시 자기 칭찬', url: 'https://link.coupang.com/a/fGrGLP8PCe' },
   ],
 };
 
@@ -619,15 +630,30 @@ function renderShop(typeKey) {
   if (!picks.length) { wrap.hidden = true; return; }
   const list = $('rShopList');
   list.innerHTML = '';
-  picks.forEach(p => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  picks.forEach((p, i) => {
     const a = document.createElement('a');
+    a.className = 'rx-card' + (i === 0 ? ' rx-first' : '');
     a.href = p.url; a.target = '_blank'; a.rel = 'sponsored noopener';
-    const txt = document.createElement('span');
-    const nm = document.createElement('span'); nm.className = 's-name'; nm.textContent = p.name;
-    const tg = document.createElement('span'); tg.className = 's-tag'; tg.textContent = p.tag;
-    txt.appendChild(nm); txt.appendChild(tg);
-    const go = document.createElement('span'); go.className = 's-go'; go.textContent = '→';
-    a.appendChild(txt); a.appendChild(go);
+    if (!reduced) a.style.animationDelay = (0.15 + i * 0.18) + 's';
+
+    const head = document.createElement('div'); head.className = 'rx-head';
+    const no = document.createElement('span'); no.className = 'rx-no'; no.textContent = 'RX-' + String(i + 1).padStart(2, '0');
+    head.appendChild(no);
+    if (i === 0) { const b = document.createElement('span'); b.className = 'rx-badge'; b.textContent = '권장 처방'; head.appendChild(b); }
+    const cta = document.createElement('span'); cta.className = 'rx-cta'; cta.textContent = '쿠팡에서 보기 →';
+    head.appendChild(cta);
+
+    const body = document.createElement('div'); body.className = 'rx-body';
+    const ic = document.createElement('span'); ic.className = 'rx-ic'; ic.textContent = p.em || '💊';
+    const txt = document.createElement('span'); txt.className = 'rx-txt';
+    const nm = document.createElement('b'); nm.textContent = p.name;
+    const tg = document.createElement('span'); tg.className = 'rx-tag'; tg.textContent = p.tag;
+    const ds = document.createElement('span'); ds.className = 'rx-dose'; ds.textContent = '복용법 — ' + p.dose;
+    txt.appendChild(nm); txt.appendChild(tg); txt.appendChild(ds);
+    body.appendChild(ic); body.appendChild(txt);
+
+    a.appendChild(head); a.appendChild(body);
     list.appendChild(a);
   });
   wrap.hidden = false;
