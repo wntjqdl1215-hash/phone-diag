@@ -14,6 +14,15 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<!-- Google Analytics (GA4) — 유형 분포·클릭 집계용 (2026-07-27)
+     ※ SRI(integrity) 미적용은 의도: gtag.js는 구글이 수시 갱신하는 동적 스크립트라 해시 고정 시 로드가 깨짐(업계 공통 예외) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HR8K73NC57"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HR8K73NC57');
+</script>
 <style>
 @font-face {
   font-family: 'GmarketSans';
@@ -462,6 +471,8 @@ const ZONES = [
 
 /* ───────── 상태 ───────── */
 const $ = (id) => document.getElementById(id);
+// GA 이벤트 안전 래퍼 — 광고차단 등으로 gtag가 없어도 테스트는 절대 안 깨지게
+function track(ev, params) { try { if (typeof gtag === 'function') gtag('event', ev, params || {}); } catch (e) {} }
 let cur = 0;
 let answers = [];   // 선택한 옵션 인덱스
 let RESULT = null;  // { score, typeKey, axisPct }
@@ -573,6 +584,7 @@ function showResult() {
   const Z = zoneOf(score);
 
   show('secResult');
+  track('test_complete', { type_key: typeKey, type_name: T.name, score: score });
   const d = new Date();
   $('rDate').textContent = d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0');
   $('rEmoji').textContent = T.emoji;
@@ -635,6 +647,7 @@ function renderShop(typeKey) {
     const a = document.createElement('a');
     a.className = 'rx-card' + (i === 0 ? ' rx-first' : '');
     a.href = p.url; a.target = '_blank'; a.rel = 'sponsored noopener';
+    a.addEventListener('click', () => track('shop_click', { item_id: p.id, item_name: p.name, type_key: typeKey }));
     if (!reduced) a.style.animationDelay = (0.15 + i * 0.18) + 's';
 
     const head = document.createElement('div'); head.className = 'rx-head';
@@ -765,12 +778,13 @@ async function drawCard() {
 }
 
 /* ───────── 버튼 ───────── */
-$('btnStart').addEventListener('click', () => { cur = 0; answers = []; renderQ(); show('secQuiz'); });
+$('btnStart').addEventListener('click', () => { track('test_start'); cur = 0; answers = []; renderQ(); show('secQuiz'); });
 $('btnRetry').addEventListener('click', () => { cur = 0; answers = []; $('gaugeFill').style.width = '0%'; show('secIntro'); });
 
 $('btnSave').addEventListener('click', async () => {
   const btn = $('btnSave');
   const orig = btn.textContent;
+  track('card_save', { type_key: RESULT ? RESULT.typeKey : null });
   btn.textContent = '카드 생성 중…';
   try {
     const url = await drawCard();
@@ -786,6 +800,7 @@ $('btnSave').addEventListener('click', async () => {
 });
 
 $('btnShare').addEventListener('click', async () => {
+  track('share_click', { type_key: RESULT ? RESULT.typeKey : null });
   const T = TYPES[RESULT.typeKey];
   const text = '내 폰 중독 유형: ' + T.name + ' ' + T.emoji + ' (중독 지수 ' + RESULT.score + '%)\n너도 진단받아 봐 👇';
   const url = location.href;
